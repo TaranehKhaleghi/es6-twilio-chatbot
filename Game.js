@@ -1,10 +1,15 @@
 const GameState = Object.freeze({
     WELCOMING:   Symbol("welcoming"),
-    FLAT:  Symbol("flat"),
-    WAIT: Symbol("wait"),
-    MANSION: Symbol("mansion"),
-    BUTLER: Symbol("butler"),
-    TOAST: Symbol("toast")
+    JUNGLE:  Symbol("jungle"),
+    STAY: Symbol("stay"),
+    SNACK: Symbol("snack"),
+    SNAKE: Symbol("snake"),
+    EAT: Symbol("eat"),
+    GOING: Symbol("going"),
+    DINNER: Symbol("dinner"),
+    HUNT: Symbol("hunt"),
+    MOUNTAIN: Symbol("mountain"),
+    BEARS: Symbol("bears")
 });
 
 export default class Game{
@@ -17,44 +22,67 @@ export default class Game{
         let sReply = "";
         switch(this.stateCur){
             case GameState.WELCOMING:
-                sReply = "It is a dark and rainy night. Bang! You have a flat tire. Too bad you don't have a spare. Do you WAIT or GO to the spooky mansion for help?";
-                this.stateCur = GameState.FLAT;
+                sReply = "You are in a jungle! Do you STAY for the night or keep GOING through the jungle? ";
+                this.stateCur = GameState.JUNGLE;
                 break;
-            case GameState.FLAT:
-                if(sInput.toLowerCase().match("wait")){
-                    sReply = "The road is deserted. After 1 hour there is still no help. Do you keep Waiting or do you go to the house?";
+            case GameState.JUNGLE:
+                if(sInput.toLowerCase().match("stay")){
+                    sReply = "You have a snack in your backpack. Do you want to eat the SNACK for the dinner or going to HUNT? ";
+                    this.stateCur = GameState.DINNER;
                 }else{
-                    sReply ="On the door is a large knocker. Do you knock or run back to your car to wait?";
-                    this.stateCur = GameState.MANSION;
+                    sReply ="There are two ways in front of you. One WALKING through the jungle and another CLIMBING the mountain. Which way do you go? ";
+                    this.stateCur = GameState.GOING;
                 }
                 break;
-            case GameState.MANSION:
-                if(sInput.toLowerCase().match("knock")){
-                    sReply = "The door opens and you are greeted by a hunch-back butler. He asks you to come in. Do you go in or run back to the car?"
-                    this.stateCur = GameState.BUTLER;
+            case GameState.DINNER:
+                if(sInput.toLowerCase().match("snack")){
+                    sReply = "You open your backpack to take the snack out. There is a snake in your backpack. Do you still want to EAT the snack or leave your backpack and go HUNT? "
+                    this.stateCur = GameState.SNACK;
                 }else{
-                    sReply = "The road is deserted. After 1 hour there is still no help. Do you keep Waiting or do you go to the house?";
-                    this.stateCur = GameState.FLAT;
-
+                    sReply = "There are two ways in front of you. One walk through the JUNGLE and another climbing the MOUNTAIN. Which way you go? ";
+                    this.stateCur = GameState.HUNT;
                 }
                 break;
-            case GameState.BUTLER:
-                if(sInput.toLowerCase().match("run")){
-                    sReply = "The road is deserted. After 1 hour there is still no help. Do you keep Waiting or do you go to the house?";
-                    this.stateCur = GameState.FLAT;
-
+            case GameState.SNACK:
+                   if(sInput.toLowerCase().match("eat")){
+                       sReply = "Game Over!"
+                   }
+                   else{
+                       sReply = "There are two ways in front of you. One WALKING through the jungle and another CLIMBING the mountain. Which way do you go? "
+                       this.stateCur = GameState.GOING;
+                   }
+                    break;
+            case GameState.GOING:
+                if(sInput.toLowerCase().match("walking")){
+                    sReply = "There are wild animals in the jungle. Do you want to STAY and fight or keep GOING? ";
+                    this.stateCur = GameState.JUNGLE;
                 }else{
-                    sReply = "You seem to have walked in to a party. The host offers you some toast. Do you take the toast or ask to call a tow truck?";
-                    this.stateCur = GameState.TOAST;
-    
+                    sReply = "You don't have the equipment to climb. Do you want to CLIMB without equipment or STAY in the jungle? ";
+                    this.stateCur = GameState.MOUNTAIN;
                 }
                 break;
-            case GameState.TOAST:
-                if(sInput.toLowerCase().match("toast")){
-                    sReply = "you enter a new world of adventure ... game over";
-                    this.stateCur = GameState.WELCOMING;
+            case GameState.HUNT:
+                if(sInput.toLowerCase().match("jungle")){
+                    sReply = "There are wild animals in the jungle. Do you want to STAY or keep GOING? ";
+                    this.stateCur = GameState.JUNGLE;
                 }else{
-                    sReply = "the phone lines are down ... Would you like some toast perhaps?";
+                    sReply = "You don't have the equipment to climb. Do you want to CLIMB without equipment or STAY in the jungle? ";
+                    this.stateCur = GameState.MOUNTAIN;
+                }
+            case GameState.MOUNTAIN:
+                if(sInput.toLowerCase().match("climb")){
+                    sReply = "There are some bears in the mountain. Can you hear their growls? (Y or N) "; 
+                    this.stateCur = GameState.BEARS;                  
+                }else{
+                    sReply = "There are wild animals in the jungle. Do you want to STAY or keep GOING? ";
+                    this.stateCur = GameState.JUNGLE;
+                }
+            case GameState.BEARS:
+                if(sInput.toLowerCase().match("y")){
+                    sReply = "Do you want to STAY or keep GOING? "
+                    this.stateCur = GameState.JUNGLE;
+                }else{
+                    sReply = "Win! "
                 }
         }
         return([sReply]);
